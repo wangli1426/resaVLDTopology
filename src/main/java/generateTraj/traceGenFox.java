@@ -104,7 +104,10 @@ public class traceGenFox extends BaseRichBolt {
             }
 
         } else if (streamId.equals(STREAM_INDICATOR_TRACE)) {
-            List<Integer> feedbackIndicators = (List<Integer>) tuple.getValueByField(FIELD_COUNTERS_INDEX);
+            List<Integer> feedbackIndicators = new ArrayList<Integer> ();
+            feedbackIndicators.addAll((List<Integer>) tuple.getValueByField(FIELD_COUNTERS_INDEX));
+
+                    ;
             if (!feedbackMonitor.containsKey(frameId)) {
                 feedbackMonitor.put(frameId, 1);
                 feedbackIndicatorList.put(frameId, feedbackIndicators);

@@ -3,6 +3,7 @@ package generateTraj;
 import backtype.storm.Config;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.AuthorizationException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.generated.StormTopology;
 import backtype.storm.topology.TopologyBuilder;
@@ -10,6 +11,7 @@ import backtype.storm.tuple.Fields;
 import tool.FrameImplImageSourceFox;
 import tool.Serializable;
 
+import javax.naming.AuthenticationException;
 import java.io.FileNotFoundException;
 
 import static tool.Constants.*;
@@ -30,7 +32,7 @@ import static topology.StormConfigManager.*;
  */
 public class tomTrajDisplayTopFoxActDetWinDrawTraj {
 
-    public static void main(String args[]) throws InterruptedException, AlreadyAliveException, InvalidTopologyException, FileNotFoundException {
+    public static void main(String args[]) throws InterruptedException, AlreadyAliveException, InvalidTopologyException, FileNotFoundException, AuthorizationException {
         if (args.length != 1) {
             System.out.println("Enter path to config file!");
             System.exit(0);
@@ -130,8 +132,10 @@ public class tomTrajDisplayTopFoxActDetWinDrawTraj {
         int windowInSeconds = getInt(conf, "windowInSeconds"); ///windowInFrames = windowInSeconds * frameRate
         int resultLastSeconds = getInt(conf, "resultLastSeconds"); /// Countdown seconds = windowInseconds - resultLastSeconds
 
+
         StormSubmitter.submitTopology("tTrajTopFoxActDetWinTrajBeta-" + init_counter + "-" + min_dis + "-" + drawTrajSampleRate
                 + "-" + inW + "-" + inH + "-" + procW + "-" + procH+ "-" + outW + "-" + outH
                 + "-" + frameRate + "-" + windowInSeconds + "-" + resultLastSeconds, conf, topology);
+
     }
 }

@@ -3,6 +3,7 @@ package topologyexp;
 import backtype.storm.Config;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.AuthorizationException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.generated.StormTopology;
 import backtype.storm.topology.TopologyBuilder;
@@ -30,7 +31,7 @@ import static topology.StormConfigManager.*;
  */
 public class tomVLDTopEchoExpFInBC {
 
-    public static void main(String args[]) throws InterruptedException, AlreadyAliveException, InvalidTopologyException, FileNotFoundException {
+    public static void main(String args[]) throws InterruptedException, AlreadyAliveException, InvalidTopologyException, FileNotFoundException, AuthorizationException {
         if (args.length != 1) {
             System.out.println("Enter path to config file!");
             System.exit(0);

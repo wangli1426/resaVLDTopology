@@ -3,6 +3,7 @@ package topology;
 import backtype.storm.Config;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.AuthorizationException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.generated.StormTopology;
 import backtype.storm.topology.TopologyBuilder;
@@ -41,7 +42,7 @@ import static topology.StormConfigManager.*;
 public class VLDTopFox {
 
 
-    public static void main(String args[]) throws InterruptedException, AlreadyAliveException, InvalidTopologyException, FileNotFoundException {
+    public static void main(String args[]) throws InterruptedException, AlreadyAliveException, InvalidTopologyException, FileNotFoundException, AuthorizationException {
         if (args.length != 1) {
             System.out.println("Enter path to config file!");
             System.exit(0);
@@ -74,12 +75,12 @@ public class VLDTopFox {
 
         builder.setBolt(patchAggBolt, new PatchAggFox(), getInt(conf, patchAggBolt + ".parallelism"))
                 .fieldsGrouping(patchProcBolt, DETECTED_LOGO_STREAM, new Fields(FIELD_SAMPLE_ID))
-                .setNumTasks(getInt(conf, patchAggBolt + ".tasks"));
+                .setNumTasks(getInt(conf, patchAggBolt + ".tasks"));    // statefull
 
         builder.setBolt(patchDrawBolt, new tDrawPatchDelta(), getInt(conf, patchDrawBolt + ".parallelism"))
                 .fieldsGrouping(patchAggBolt, PROCESSED_FRAME_STREAM, new Fields(FIELD_FRAME_ID))
                 .fieldsGrouping(spoutName, RAW_FRAME_STREAM, new Fields(FIELD_FRAME_ID))
-                .setNumTasks(getInt(conf, patchDrawBolt + ".tasks"));
+                .setNumTasks(getInt(conf, patchDrawBolt + ".tasks"));   // statefull
 
         builder.setBolt(redisFrameOut, new RedisFrameOutputFox(), getInt(conf, redisFrameOut + ".parallelism"))
                 .globalGrouping(patchDrawBolt, STREAM_FRAME_DISPLAY)
